@@ -41,7 +41,7 @@ namespace osu.Game.Rulesets.Mods
 
             FirstObjectTime = beatmap.HitObjects.First().StartTime;
             double lastObjectEnd = beatmap.GetLastObjectTime();
-            StartTime.MaxValue = Math.Ceiling((lastObjectEnd - FirstObjectTime) / 1000);
+            StartTime.MaxValue = Math.Floor((lastObjectEnd - FirstObjectTime) / 1000);
         }
 
         public void ApplyToPlayer(Player? player)
@@ -68,7 +68,7 @@ namespace osu.Game.Rulesets.Mods
                 base.LoadComplete();
 
                 if (workingBeatmap.Value?.BeatmapInfo.Length > 0 && Current is BindableNumber<double> num)
-                    num.MaxValue = Math.Ceiling(workingBeatmap.Value.BeatmapInfo.Length / 1000);
+                    num.MaxValue = Math.Floor(workingBeatmap.Value.BeatmapInfo.Length / 1000);
             }
 
             public override LocalisableString TooltipText => FormatStartTime(Current.Value);

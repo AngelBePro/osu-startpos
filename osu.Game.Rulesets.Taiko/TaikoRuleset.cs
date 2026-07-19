@@ -156,6 +156,7 @@ namespace osu.Game.Rulesets.Taiko
                 case ModType.Conversion:
                     return new Mod[]
                     {
+                        new TaikoModStartPos(),
                         new TaikoModRandom(),
                         new TaikoModDifficultyAdjust(),
                         new TaikoModClassic(),

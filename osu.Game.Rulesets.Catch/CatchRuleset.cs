@@ -135,6 +135,7 @@ namespace osu.Game.Rulesets.Catch
                 case ModType.Conversion:
                     return new Mod[]
                     {
+                        new CatchModStartPos(),
                         new CatchModDifficultyAdjust(),
                         new CatchModClassic(),
                         new CatchModMirror(),

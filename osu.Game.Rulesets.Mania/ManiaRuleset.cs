@@ -260,6 +260,7 @@ namespace osu.Game.Rulesets.Mania
                 case ModType.Conversion:
                     return new Mod[]
                     {
+                        new ManiaModStartPos(),
                         new ManiaModRandom(),
                         new ManiaModDualStages(),
                         new ManiaModMirror(),
