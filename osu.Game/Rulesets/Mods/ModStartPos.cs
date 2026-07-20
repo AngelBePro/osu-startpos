@@ -69,6 +69,6 @@ namespace osu.Game.Rulesets.Mods
                 num.MaxValue = Math.Floor(workingBeatmap.Value.BeatmapInfo.Length / 1000);
         }
 
-        public override LocalisableString TooltipText => workingBeatmap.Value.BeatmapInfo.Length.ToFormattedDuration();
+        public override LocalisableString TooltipText => (Current.Value * 1000).ToFormattedDuration();
     }
 }
