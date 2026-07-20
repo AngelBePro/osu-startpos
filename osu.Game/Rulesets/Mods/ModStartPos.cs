@@ -59,12 +59,15 @@ namespace osu.Game.Rulesets.Mods
         [Resolved]
         private IBindable<WorkingBeatmap> workingBeatmap { get; set; } = null!;
 
-
-
         protected override void LoadComplete()
         {
             base.LoadComplete();
 
+            workingBeatmap.BindValueChanged(_ => updateMaxValue(), true);
+        }
+
+        private void updateMaxValue()
+        {
             if (workingBeatmap.Value?.BeatmapInfo.Length > 0 && Current is BindableNumber<double> num)
                 num.MaxValue = Math.Floor(workingBeatmap.Value.BeatmapInfo.Length / 1000);
         }
