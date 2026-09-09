@@ -37,17 +37,19 @@ using osuTK.Input;
 namespace osu.Game.Rulesets.Osu.Edit
 {
     [Cached]
-    public partial class OsuHitObjectComposer : HitObjectComposer<OsuHitObject>
+    public partial class OsuHitObjectComposer : HitObjectComposer<OsuHitObject, OsuAction>
     {
         public OsuHitObjectComposer(Ruleset ruleset)
             : base(ruleset)
         {
         }
 
+        public override Bindable<TernaryState> SelectionNewComboState { get; } = new Bindable<TernaryState>();
+
         protected override DrawableRuleset<OsuHitObject> CreateDrawableRuleset(Ruleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods)
             => new DrawableOsuEditorRuleset(ruleset, beatmap, mods);
 
-        protected override IReadOnlyList<CompositionTool> CompositionTools => new CompositionTool[]
+        protected override IReadOnlyList<CompositionTool<OsuAction>> CompositionTools => new CompositionTool<OsuAction>[]
         {
             new HitCircleCompositionTool(),
             new SliderCompositionTool(),
@@ -57,15 +59,17 @@ namespace osu.Game.Rulesets.Osu.Edit
 
         private readonly Bindable<TernaryState> rectangularGridSnapToggle = new Bindable<TernaryState>();
 
-        protected override Drawable CreateHitObjectInspector() => new OsuHitObjectInspector();
+        protected override Drawable CreateHitObjectInspector() => new OsuHitObjectInspector(DistanceSnapProvider);
 
         protected override IEnumerable<Drawable> CreateTernaryButtons()
             => base.CreateTernaryButtons()
-                   .Append(new DrawableTernaryButton
+                   .Append(new DrawableTernaryButton<OsuAction>
                    {
                        Current = rectangularGridSnapToggle,
                        Description = "Grid Snap",
                        CreateIcon = () => new SpriteIcon { Icon = OsuIcon.EditorGridSnap },
+                       Action = OsuAction.EditorToggleGridSnap,
+                       Hotkey = HotkeyForAction(OsuAction.EditorToggleGridSnap)
                    })
                    .Concat(DistanceSnapProvider.CreateTernaryButtons());
 
@@ -388,8 +392,7 @@ namespace osu.Game.Rulesets.Osu.Edit
 
                 if (!osuSelectionHandler.SelectedItems.Any())
                 {
-                    osuSelectionHandler.SelectionNewComboState.Value =
-                        osuSelectionHandler.SelectionNewComboState.Value == TernaryState.False ? TernaryState.True : TernaryState.False;
+                    SelectionNewComboState!.Value = SelectionNewComboState.Value == TernaryState.False ? TernaryState.True : TernaryState.False;
                     return true;
                 }
             }
